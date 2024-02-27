@@ -5,6 +5,7 @@ import { BackendURL } from "./component/backendURL";
 
 import { Login } from "./pages/login";
 import { SignUp } from "./pages/signup";
+import { Private } from "./pages/private";
 
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
@@ -30,6 +31,7 @@ const Layout = () => {
 					<Routes>
 						<Route element={<Login />} path="/" />
 						<Route element={<SignUp />} path="/signup" />
+						<Route element={<Private />} path="/private" />
 						<Route element={<Demo />} path="/demo" />
 						<Route element={<Single />} path="/single/:theid" />
 						<Route element={<h1>Not found!</h1>} />

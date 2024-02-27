@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from "../store/appContext";
 
 export const SignUp = () => {
+	const { store, actions } = useContext(Context);
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
-		confirmPassword: "",
 	});
 
 	const handleChange = (e) => {
@@ -24,14 +25,17 @@ export const SignUp = () => {
 			alert("Las contraseñas no coinciden");
 			return;
 		}
+
+		actions.signup(formData.email, formData.password);
+
 		// Aquí puedes enviar los datos del formulario al servidor
 		console.log("Datos del formulario:", formData);
 	};
 
 	return (
 		<div className="w-25 m-auto mt-5 mb-5">
-			<form onSubmit={handleSubmit}>
-				<div className="form-group mb-2">
+			<form className="form-group" onSubmit={handleSubmit}>
+				<div className="form-group mb-3">
 					<label htmlFor="exampleInputEmail1">Email address</label>
 					<input
 						type="email"
@@ -43,7 +47,7 @@ export const SignUp = () => {
 						onChange={handleChange}
 					/>
 				</div>
-				<div className="form-group mb-2">
+				<div className="form-group mb-3">
 					<label htmlFor="exampleInputPassword1">Password</label>
 					<input
 						type="password"
@@ -55,7 +59,7 @@ export const SignUp = () => {
 						onChange={handleChange}
 					/>
 				</div>
-				<div className="form-group mb-2">
+				<div className="form-group mb-3">
 					<label htmlFor="exampleInputConfirmPassword1">
 						Confirm Password
 					</label>

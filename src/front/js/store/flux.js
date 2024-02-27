@@ -27,6 +27,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log("Login out");
 				setStore({ token: null });
 			},
+			signup: async (email, password) => {
+				try {
+					const opts = {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							email: email,
+							password: password,
+						}),
+					};
+					const resp = await fetch(
+						"http://127.0.0.1:3001/api/signup",
+						opts
+					);
+					if (resp.status === 200) {
+						const data = await resp.json();
+						console.log("This came from the backend", data);
+					}
+				} catch (error) {
+					console.error("There was an error", error);
+				}
+			},
 			login: async (email, password) => {
 				try {
 					const opts = {
@@ -46,6 +70,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (resp.status === 200) {
 						const data = await resp.json();
 						console.log("This came from the backend", data);
+
+						// Añadimos el token al storage del usuario para poder identificarlo
 						sessionStorage.setItem("token", data.access_token);
 						setStore({ token: data.access_token });
 					} else {
@@ -55,7 +81,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("There was an error", error);
 				}
 			},
+			accessPrivate: async () => {
+				const token = localStorage.getItem("token");
 
+				const resp = await fetch("http://localhost:3001/api/private", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + token,
+					},
+				});
+				if (!resp.ok) {
+					throw Error("There was a error woth the login request");
+				} else if (resp.status === 403) {
+					throw Error("Missing or invalid token");
+				} else {
+					throw Error("Unknown error");
+				}
+
+				const data = await resp.json();
+				console.log("This is the data request", data);
+				return data;
+			},
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},

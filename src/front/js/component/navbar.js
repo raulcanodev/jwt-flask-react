@@ -9,9 +9,15 @@ export const Navbar = () => {
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
-				<span className="navbar-brand mb-0 h1">React & Flask</span>
-
+				<Link to="/">
+					<span className="navbar-brand mb-0 h1">React & Flask</span>
+				</Link>
 				<div className="ml-auto">
+					<Link to="/private">
+						<button className="btn btn-secondary me-4">
+							View private messages
+						</button>
+					</Link>
 					{!store.token ? (
 						location.pathname === "/signup" ? (
 							<Link to="/">

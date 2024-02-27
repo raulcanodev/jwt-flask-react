@@ -17,6 +17,7 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API from others domains diferent to the flask server
 CORS(api)
 
+
 ###################### Raul ###########################
 
 # Create a route to authenticate your users and return JWT Token
@@ -41,16 +42,24 @@ def create_token():
     # access_token = create_access_token(identity=email)
     # return jsonify({ "token": access_token, "user_id": user.id })
 
-@jwt_required()
 @api.route('/private', methods=['GET'])
+@jwt_required()
 def private():
-    pass
+    current_email = get_jwt_identity()
+    
+    user = User.query.filter_by(email=current_email).first()
+
+    if user is not None:
+        return jsonify(user.serialize()), 200
+    else:
+        return jsonify({"msg":"Bad email or password"}), 401
 
 
 @api.route('/signup', methods=['POST'])
 def signup():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
+    print(email, password)
 
     #Verificar si el email y la contraseña estan presentes en el post
     if not email or not password:
@@ -66,6 +75,7 @@ def signup():
 
     db.session.add(new_user)
     db.session.commit()
+    return jsonify(new_user.serialize()), 200
 
 
 ######################################################

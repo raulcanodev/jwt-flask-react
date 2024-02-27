@@ -25,8 +25,8 @@ export const Login = () => {
 	// sessionStorage.removeItem("token")
 
 	return (
-		<div className="w-50 m-auto mt-5">
-			<div className="alert alert-info text-center">
+		<div className="m-auto mt-5">
+			<div className="alert alert-secondary text-center">
 				{store.message || "Backend not conected"}
 			</div>
 			<h1 className="text-center">Login (Flask API & React)</h1>
