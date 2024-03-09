@@ -17,6 +17,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 		},
 		actions: {
+			verifyIdentity: () => {
+				const store = getStore();
+				const token = localStorage.getItem("token");
+
+				fetch("http://127.0.0.1:3001/api/verify_token", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + token, // Se agregó un espacio después de "Bearer"
+					},
+				})
+					.then((resp) => resp.json())
+					.then((data) => {
+						if (data && data.user) {
+							setStore({ user: data.user, token: token });
+						}
+					})
+					.catch((e) => {
+						console.error(e);
+					});
+			},
+
 			syncTokenFromSessionStore: () => {
 				const token = sessionStorage.getItem("token");
 				if (token && token != "" && token != undefined)

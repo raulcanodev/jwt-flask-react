@@ -77,6 +77,17 @@ def signup():
     db.session.commit()
     return jsonify(new_user.serialize()), 200
 
+@api.route('/verify_token')
+@jwt_required
+def verify():
+    current_email = get_jwt_identity()
+
+    user = User.query.filter_by(email=current_email).first()
+
+    if user is None:
+        return jsonify({"error":"No existe este user"}), 401
+    
+    return jsonify({"user" : user.serialize()}), 200
 
 ######################################################
 

@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
 	const { store, actions } = useContext(Context);
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -26,7 +28,7 @@ export const SignUp = () => {
 			return;
 		}
 
-		actions.signup(formData.email, formData.password);
+		actions.signup(formData.email, formData.password, navigate);
 
 		// Aquí puedes enviar los datos del formulario al servidor
 		console.log("Datos del formulario:", formData);
